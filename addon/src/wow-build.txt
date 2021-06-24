@@ -1,0 +1,4 @@
+Build # / Interface #: 20501
+
+Addon Directory
+E:\World of Warcraft\_classic_\Interface\AddOns\
