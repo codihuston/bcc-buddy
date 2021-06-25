@@ -2,5 +2,7 @@
 ## Title: Hello World
 ## Author: Codi Huston
 ## Version: 1.0
+## SavedVariables: HELLOWORLD_DB
+## SavedVariablesPerCharacter: HELLOWORLD_CHARACTER_DB
 
 main.lua
