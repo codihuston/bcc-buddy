@@ -3,6 +3,26 @@
 -- saved variable, table name: SANDBOXSV1
 HELLOWORLD_DB = {ADDON_NAME = "HelloWorld", ["test"] = 1}
 HELLOWORLD_CHARACTER_DB = {["QUESTS_COMPLETED"] = {}}
+SLOTS = {
+  "HeadSlot",
+  "NeckSlot",
+  "ShoulderSlot",
+  "BackSlot",
+  "ChestSlot",
+  "ShirtSlot",
+  "TabardSlot",
+  "WristSlot",
+  "HandsSlot",
+  "WaistSlot",
+  "LegsSlot",
+  "FeetSlot",
+  "Finger0Slot",
+  "Finger1Slot",
+  "Trinket0Slot",
+  "Trinket1Slot",
+  "MainHandSlot",
+  "SecondaryHandSlot",
+}
 
 function HelloWorld_OnLoad(self) print("HelloWorld loaded!") end
 
@@ -77,9 +97,9 @@ function TestInpect()
 end
 
 -- /run GetHeadSlotInfo()
-function GetHeadSlotInfo(slot)
+function GetHeadSlotInfo()
     -- local headslotLink = GetInventoryItemLink("player", GetInventorySlotInfo("HEADSLOT"))
-    local slotId = GetInventorySlotInfo(slot)
+    local slotId = GetInventorySlotInfo("HEADSLOT")
     local link = GetInventoryItemLink("player", slotId)
     -- see: https://wowwiki-archive.fandom.com/wiki/API_GetItemInfo
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,
@@ -89,7 +109,7 @@ function GetHeadSlotInfo(slot)
           Unique, LinkLvl, Name = string.find(itemLink,
                                               "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
     print("itemName: ", itemName)
-    -- itemLink can be parsed: https://wowwiki-archive.fandom.com/wiki/ItemLink
+    -- itemLink can be parsed: https://wowpedia.fandom.com/wiki/ItemLink
     print("itemLink: ", itemLink)
     print("\t Color: ", Color)
     print("\t Ltype: ", Ltype)
@@ -119,4 +139,64 @@ function GetHeadSlotInfo(slot)
     print(gem3)
     print(gem4)
     print(itemType)
+end
+
+-- /run GetSlotInfo(slot)
+function GetSlotInfo(slot)
+  -- local headslotLink = GetInventoryItemLink("player", GetInventorySlotInfo("HEADSLOT"))
+  local slotId = GetInventorySlotInfo(slot)
+  local link = GetInventoryItemLink("player", slotId)
+  -- if there is a link, we can get data
+  if link then
+    print("QQQ link", link)
+    -- see: https://wowwiki-archive.fandom.com/wiki/API_GetItemInfo
+    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,
+          itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
+        GetItemInfo(link)
+    local _, _, Color, Ltype, Id, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix,
+          Unique, LinkLvl, Name = string.find(itemLink,
+                                              "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
+    print("itemName: ", itemName)
+    -- itemLink can be parsed: https://wowpedia.fandom.com/wiki/ItemLink
+    print("itemLink: ", itemLink)
+    print("\t Color: ", Color)
+    print("\t Ltype: ", Ltype)
+    print("\t Id: ", Id)
+    print("\t Enchant: ", Enchant)
+    print("\t Gem1: ", Gem1)
+    print("\t Gem2: ", Gem2)
+    print("\t Gem3: ", Gem3)
+    print("\t Gem4: ", Gem4)
+    print("\t Suffix: ", Suffix)
+    print("\t Unique: ", Unique)
+    print("\t LinkLvl: ", LinkLvl)
+    print("\t Name: ", Name)
+    print("itemRarity: ", itemRarity)
+    print("itemLevel: ", itemLevel)
+    print("itemMinLevel: ", itemMinLevel)
+    print("itemType: ", itemType)
+    print("itemSubType: ", itemSubType)
+    print("itemStackCount: ", itemStackCount)
+    print("itemEquipLoc: ", itemEquipLoc)
+    print("itemTexture: ", itemTexture)
+    print("itemSellPrice: ", itemSellPrice)
+    print("----")
+    print(enchantId)
+    print(gem1)
+    print(gem2)
+    print(gem3)
+    print(gem4)
+    print(itemType)
+  else
+    print("no item equiped in this slot!")
+  end
+end
+
+-- /run GetEquipmentInfo()
+function GetEquipmentInfo()
+  for k,v in pairs(SLOTS) do 
+    print("--- start get slot info", k, v)
+    GetSlotInfo(v)
+    print("--- end get slot info", k, v)
+  end
 end
