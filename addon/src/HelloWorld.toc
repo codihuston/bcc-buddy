@@ -5,4 +5,5 @@
 ## SavedVariables: HELLOWORLD_DB
 ## SavedVariablesPerCharacter: HELLOWORLD_CHARACTER_DB
 
-main.lua
+json.lua
+helloworld.lua
