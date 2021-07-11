@@ -25,7 +25,7 @@ Param(
   [string] $WOW_WTF_PATH="C:\Program Files (x86)\World of Warcraft\_classic_\WTF"
 )
 
-$ADDON_NAME = "HelloWorld"
+$ADDON_NAME = "BCCBuddy"
 $ADDON_SAVED_VARS_FILE_NAME = "$ADDON_NAME.lua"
 
 function Test-WOWWTFPath{

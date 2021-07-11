@@ -1,5 +1,5 @@
 $WOWAddonsPath = "E:\World of Warcraft\_classic_\Interface\AddOns\"
-$AddonName = "HelloWorld"
+$AddonName = "BCCBuddy"
 $AddonPath = "$WOWAddonsPath/$AddonName"
 
 New-Item -ItemType Directory -Path $AddonPath -ErrorAction SilentlyContinue
