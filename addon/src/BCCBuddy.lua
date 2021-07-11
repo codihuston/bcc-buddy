@@ -84,7 +84,7 @@ function GetCharacterInfo()
     character.race = UnitRace("player")
     character.equipment = GetEquipmentInfo()
     character.stats = GetStats()
-    character.availableQuests = GetAvailableQusts()
+    character.completedQuests = GetCompletedQuests()
     character.talents = GetPlayerTalentInfo()
     character.level = UnitLevel("player")
     character.class = {}
@@ -195,13 +195,13 @@ function GetStats()
     return stats
 end
 
-function GetAvailableQusts()
-    quests = {}
-    for id in pairs(GetQuestsCompleted()) do
-        local quest = C_QuestLog.GetQuestInfo(id)
-        quests[tostring(id)] = quest
-    end
-    return quests
+function GetCompletedQuests()
+  quests = {}
+  for id in pairs(GetQuestsCompleted()) do
+    local name = C_QuestLog.GetQuestInfo(id)
+    quests[tostring(id)] = name
+  end
+  return quests
 end
 
 -- /run GetPlayerTalentInfo()
