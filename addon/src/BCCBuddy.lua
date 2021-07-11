@@ -6,25 +6,6 @@ else
     LibDeflate = require("LibDeflate")
 end
 
-local example_input = "12123123412345123456123456712345678123456789"
-
---- Compress using raw deflate format
-local compress_deflate = LibDeflate:CompressDeflate(example_input)
-print("compresS", compress_deflate)
-
--- decompress
-local decompress_deflate = LibDeflate:DecompressDeflate(compress_deflate)
-print("decomporess", decompress_deflate)
-
--- Check if the first return value of DecompressXXXX is non-nil to know if the
--- decompression succeeds.
-if decompress_deflate == nil then
-    error("Decompression fails.")
-else
-    -- Decompression succeeds.
-    assert(example_input == decompress_deflate)
-end
-
 function BCCBuddyEditBox_Show(text)
     if not BCCBuddyEditBox then
         local f = CreateFrame("Frame", "BCCBuddyEditBox", UIParent,
