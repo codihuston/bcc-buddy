@@ -1,4 +1,29 @@
 -- refs: https://wowpedia.fandom.com/wiki/Global_functions/Classic
+local LibDeflate
+if LibStub then -- You are using LibDeflate as WoW addon
+    LibDeflate = LibStub:GetLibrary("LibDeflate")
+else
+    LibDeflate = require("LibDeflate")
+end
+
+local example_input = "12123123412345123456123456712345678123456789"
+
+--- Compress using raw deflate format
+local compress_deflate = LibDeflate:CompressDeflate(example_input)
+print("compresS", compress_deflate)
+
+-- decompress
+local decompress_deflate = LibDeflate:DecompressDeflate(compress_deflate)
+print("decomporess", decompress_deflate)
+
+-- Check if the first return value of DecompressXXXX is non-nil to know if the
+-- decompression succeeds.
+if decompress_deflate == nil then
+    error("Decompression fails.")
+else
+    -- Decompression succeeds.
+    assert(example_input == decompress_deflate)
+end
 
 function BCCBuddyEditBox_Show(text)
     if not BCCBuddyEditBox then
@@ -73,8 +98,9 @@ function BCCBuddyEditBox_Show(text)
     BCCBuddyEditBox:Show()
 end
 
--- /run GetCharacterInfo()
-function GetCharacterInfo()
+-- /run GetCharacterInfo(true)
+-- /run GetCharacterInfo(false)
+function GetCharacterInfo(compress)
     local character = {}
     local name, _ = UnitName("player")
     local realm = GetRealmName()
@@ -95,7 +121,14 @@ function GetCharacterInfo()
                                                                "player");
     character.power.max = UnitPowerMax("player")
 
-    BCCBuddyEditBox_Show(json.encode(character))
+    local input = json.encode(character)
+
+    if compress then
+        local printable_compressed = LibDeflate:EncodeForPrint(input)
+        BCCBuddyEditBox_Show(printable_compressed)
+    else
+        BCCBuddyEditBox_Show(input)
+    end
 end
 
 function GetStats()
@@ -128,8 +161,8 @@ function GetStats()
     stats.defenses = {}
     stats.defenses.armor, _, _, _, _ = UnitArmor("player")
     stats.defenses.defense = {}
-    stats.defenses.defense.base, stats.defenses.defense.armor =
-        UnitDefense("player");
+    stats.defenses.defense.base, stats.defenses.defense.armor = UnitDefense(
+                                                                    "player");
     stats.defenses.defense.rating = GetCombatRating(16)
     stats.defenses.dodgeChance = GetDodgeChance()
     stats.defenses.blockChance = GetBlockChance()
@@ -196,12 +229,12 @@ function GetStats()
 end
 
 function GetCompletedQuests()
-  quests = {}
-  for id in pairs(GetQuestsCompleted()) do
-    local name = C_QuestLog.GetQuestInfo(id)
-    quests[tostring(id)] = name
-  end
-  return quests
+    quests = {}
+    for id in pairs(GetQuestsCompleted()) do
+        local name = C_QuestLog.GetQuestInfo(id)
+        quests[tostring(id)] = name
+    end
+    return quests
 end
 
 -- /run GetPlayerTalentInfo()
@@ -212,14 +245,16 @@ function GetPlayerTalentInfo()
         talentTab = {}
         talentTab.talents = {}
 
-        talentTab.id, talentTab.name, talentTab.total, talentTab.iconTexture, talentTab.pointsSpent, talentTab.background, talentTab.previewPointsSpent, talentTab.isUnlocked = GetTalentTabInfo( tabIndex )
-        
+        talentTab.id, talentTab.name, talentTab.total, talentTab.iconTexture, talentTab.pointsSpent, talentTab.background, talentTab.previewPointsSpent, talentTab.isUnlocked =
+            GetTalentTabInfo(tabIndex)
+
         for talentIndex = 1, GetNumTalents(tabIndex) do
             talent = {}
-            talent.name, talent.icon, talent.tier, talent.column, talent.currRank, talent.maxRank = GetTalentInfo(tabIndex,talentIndex);
+            talent.name, talent.icon, talent.tier, talent.column, talent.currRank, talent.maxRank =
+                GetTalentInfo(tabIndex, talentIndex);
             talentTab.talents[talentIndex] = talent
         end
-        
+
         talents[tabIndex] = talentTab
     end
 
@@ -240,9 +275,9 @@ end
 
 -- /run GetEquipmentInfo()
 function GetEquipmentInfo()
-  equipment = {}
-  for k, v in pairs(SLOTS) do equipment[k] = GetSlotInfo(v) end
-  return equipment
+    equipment = {}
+    for k, v in pairs(SLOTS) do equipment[k] = GetSlotInfo(v) end
+    return equipment
 end
 
 -- /run GetSlotInfo(slot)

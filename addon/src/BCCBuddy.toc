@@ -5,6 +5,7 @@
 ## SavedVariables: BCC_BUDDY_DB
 ## SavedVariablesPerCharacter: BCC_BUDDY_CHARACTER_DB
 
+LibDeflate.lua
 json.lua
 globals.lua
 BCCBuddy.lua
