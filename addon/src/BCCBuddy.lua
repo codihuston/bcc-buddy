@@ -2,8 +2,8 @@
 -- E:\World of Warcraft\_classic_\WTF\Account\***REMOVED***\SavedVariables
 -- saved variable, table name: SANDBOXSV1
 -- refs: https://wowpedia.fandom.com/wiki/Global_functions/Classic
-HELLOWORLD_DB = {ADDON_NAME = "HelloWorld", ["test"] = 1}
-HELLOWORLD_CHARACTER_DB = {["QUESTS_COMPLETED"] = {}}
+BCCBUDDY_DB = {ADDON_NAME = "BCCBuddy", ["test"] = 1}
+BCCBUDDY_CHARACTER_DB = {["QUESTS_COMPLETED"] = {}}
 SLOTS = {
     "HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot",
     "ShirtSlot", "TabardSlot", "WristSlot", "HandsSlot", "WaistSlot",
@@ -88,9 +88,9 @@ COMBAT_RATINGS = {
     [30] = "CR_VERSATILITY_DAMAGE_TAKEN"
 }
 
-function HelloWorldEditBox_Show(text)
-    if not HelloWorldEditBox then
-        local f = CreateFrame("Frame", "HelloWorldEditBox", UIParent,
+function BCCBuddyEditBox_Show(text)
+    if not BCCBuddyEditBox then
+        local f = CreateFrame("Frame", "BCCBuddyEditBox", UIParent,
                               "DialogBoxFrame")
         f:SetPoint("CENTER")
         f:SetSize(600, 500)
@@ -112,16 +112,16 @@ function HelloWorldEditBox_Show(text)
         f:SetScript("OnMouseUp", f.StopMovingOrSizing)
 
         -- ScrollFrame
-        local sf = CreateFrame("ScrollFrame", "HelloWorldEditBoxScrollFrame",
-                               HelloWorldEditBox, "UIPanelScrollFrameTemplate")
+        local sf = CreateFrame("ScrollFrame", "BCCBuddyEditBoxScrollFrame",
+                               BCCBuddyEditBox, "UIPanelScrollFrameTemplate")
         sf:SetPoint("LEFT", 16, 0)
         sf:SetPoint("RIGHT", -32, 0)
         sf:SetPoint("TOP", 0, -16)
-        sf:SetPoint("BOTTOM", HelloWorldEditBoxButton, "TOP", 0, 0)
+        sf:SetPoint("BOTTOM", BCCBuddyEditBoxButton, "TOP", 0, 0)
 
         -- EditBox
-        local eb = CreateFrame("EditBox", "HelloWorldEditBoxEditBox",
-                               HelloWorldEditBoxScrollFrame)
+        local eb = CreateFrame("EditBox", "BCCBuddyEditBoxEditBox",
+                               BCCBuddyEditBoxScrollFrame)
         eb:SetSize(sf:GetSize())
         eb:SetMultiLine(true)
         eb:SetAutoFocus(false) -- dont automatically focus
@@ -133,8 +133,8 @@ function HelloWorldEditBox_Show(text)
         f:SetResizable(true)
         f:SetMinResize(150, 100)
 
-        local rb = CreateFrame("Button", "HelloWorldEditBoxResizeButton",
-                               HelloWorldEditBox)
+        local rb = CreateFrame("Button", "BCCBuddyEditBoxResizeButton",
+                               BCCBuddyEditBox)
         rb:SetPoint("BOTTOMRIGHT", -6, 7)
         rb:SetSize(16, 16)
 
@@ -157,11 +157,11 @@ function HelloWorldEditBox_Show(text)
         f:Show()
     end
 
-    if text then HelloWorldEditBoxEditBox:SetText(text) end
-    HelloWorldEditBox:Show()
+    if text then BCCBuddyEditBoxEditBox:SetText(text) end
+    BCCBuddyEditBox:Show()
 end
 
-function TestHelloWorld(t)
+function TestBCCBuddy(t)
     t = t and wipe(t) or {}
     for i = 1, 10 do
         print(i)
@@ -171,7 +171,7 @@ function TestHelloWorld(t)
     return t
 end
 
--- /run GetAvailableQuests(HELLOWORLD_DB)
+-- /run GetAvailableQuests(BCCBuddy_DB)
 function GetAvailableQuests(t)
     t = t and wipe(t) or {}
     for id in pairs(GetQuestsCompleted()) do
@@ -202,7 +202,7 @@ function GetCharacterInfo()
                                                                "player");
     character.power.max = UnitPowerMax("player")
 
-    HelloWorldEditBox_Show(json.encode(character))
+    BCCBuddyEditBox_Show(json.encode(character))
 end
 
 function GetStats()
@@ -338,15 +338,15 @@ function GetPlayerTalentInfo()
     return talents
 end
 
--- /run SetAvailableQuests(HELLOWORLD_DB)
--- /run SetAvailableQuests(HELLOWORLD_CHARACTER_DB)
+-- /run SetAvailableQuests(BCCBuddy_DB)
+-- /run SetAvailableQuests(BCCBuddy_CHARACTER_DB)
 function SetAvailableQuests()
-    HELLOWORLD_CHARACTER_DB["QUESTS_COMPLETED"] = {}
+    BCCBuddy_CHARACTER_DB["QUESTS_COMPLETED"] = {}
     for id in pairs(GetQuestsCompleted()) do
         local quest = C_QuestLog.GetQuestInfo(id)
         local name = quest
         print(id, name)
-        HELLOWORLD_CHARACTER_DB["QUESTS_COMPLETED"][id] = quest
+        BCCBuddy_CHARACTER_DB["QUESTS_COMPLETED"][id] = quest
         -- tinsert(t, id, quest)
     end
 end
