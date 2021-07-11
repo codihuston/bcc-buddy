@@ -213,7 +213,11 @@ function GetCompletedQuests()
     quests = {}
     for id in pairs(GetQuestsCompleted()) do
         local name = C_QuestLog.GetQuestInfo(id)
-        quests[tostring(id)] = name
+        quest = {
+          id = tostring(id),
+          name = name
+        }
+        table.insert(quests, quest)
     end
     return quests
 end
@@ -257,7 +261,7 @@ end
 -- /run GetEquipmentInfo()
 function GetEquipmentInfo()
     equipment = {}
-    for k, v in pairs(SLOTS) do equipment[k] = GetSlotInfo(v) end
+    for k, v in pairs(SLOTS) do equipment[v] = GetSlotInfo(v) end
     return equipment
 end
 
@@ -270,7 +274,7 @@ function GetSlotInfo(slot)
     -- if there is a link, we can get data
     if link then
         -- see: https://wowwiki-archive.fandom.com/wiki/ItemLink#Printing_links_for_debug
-        linkText = gsub(link, "\124", "\124\124");
+        local linkText = gsub(link, "\124", "\124\124");
         -- see: https://wowwiki-archive.fandom.com/wiki/API_GetItemInfo
         local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,
               itemSubType, itemStackCount, itemEquipLoc, itemTexture,
@@ -302,6 +306,8 @@ function GetSlotInfo(slot)
         item.sellPrice = itemSellPrice
     else
         -- print("no item equiped in this slot!")
+        -- NOTE: this json lib "loses" nil keys!
+        return nil
     end
     return item
 end
