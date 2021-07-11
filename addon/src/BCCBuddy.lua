@@ -1,92 +1,4 @@
--- E:\World of Warcraft\_classic_\WTF\Account\***REMOVED***\Earthfury\Zypth\SavedVariables
--- E:\World of Warcraft\_classic_\WTF\Account\***REMOVED***\SavedVariables
--- saved variable, table name: SANDBOXSV1
 -- refs: https://wowpedia.fandom.com/wiki/Global_functions/Classic
-BCCBUDDY_DB = {ADDON_NAME = "BCCBuddy", ["test"] = 1}
-BCCBUDDY_CHARACTER_DB = {["QUESTS_COMPLETED"] = {}}
-SLOTS = {
-    "HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot",
-    "ShirtSlot", "TabardSlot", "WristSlot", "HandsSlot", "WaistSlot",
-    "LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "Trinket0Slot",
-    "Trinket1Slot", "MainHandSlot", "SecondaryHandSlot"
-}
--- stat ids
-STAT_ID_STRENGTH = 1
-STAT_ID_AGILITY = 2
-STAT_ID_STAMINA = 3
-STAT_ID_INTELLECT = 4
-STAT_ID_SPIRIT = 5
--- spell tree globals
-SPELL_TREE_ID_PHYSICAL = 1
-SPELL_TREE_ID_HOLY = 2
-SPELL_TREE_ID_FIRE = 3
-SPELL_TREE_ID_NATURE = 4
-SPELL_TREE_ID_FROST = 5
-SPELL_TREE_ID_SHADOW = 6
-SPELL_TREE_ID_ARCANE = 7
--- combat rating globals
-CR_UNUSED_1 = 1;
-CR_DEFENSE_SKILL = 2;
-CR_DODGE = 3;
-CR_PARRY = 4;
-CR_BLOCK = 5;
-CR_HIT_MELEE = 6;
-CR_HIT_RANGED = 7;
-CR_HIT_SPELL = 8;
-CR_CRIT_MELEE = 9;
-CR_CRIT_RANGED = 10;
-CR_CRIT_SPELL = 11;
-CR_CORRUPTION = 12;
-CR_CORRUPTION_RESISTANCE = 13;
-CR_SPEED = 14;
-COMBAT_RATING_RESILIENCE_CRIT_TAKEN = 15;
-COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN = 16;
-CR_LIFESTEAL = 17;
-CR_HASTE_MELEE = 18;
-CR_HASTE_RANGED = 19;
-CR_HASTE_SPELL = 20;
-CR_AVOIDANCE = 21;
-CR_UNUSED_2 = 22;
-CR_WEAPON_SKILL_RANGED = 23;
-CR_EXPERTISE = 24;
-CR_ARMOR_PENETRATION = 25;
-CR_MASTERY = 26;
-CR_UNUSED_3 = 27;
-CR_UNUSED_4 = 28;
-CR_VERSATILITY_DAMAGE_DONE = 29;
-CR_VERSATILITY_DAMAGE_TAKEN = 31;
-COMBAT_RATINGS = {
-    [1] = "CR_UNUSED_1",
-    [2] = "CR_DEFENSE_SKILL",
-    [3] = "CR_DODGE",
-    [4] = "CR_PARRY",
-    [5] = "CR_BLOCK",
-    [6] = "CR_HIT_MELEE",
-    [7] = "CR_HIT_RANGED",
-    [8] = "CR_HIT_SPELL",
-    [9] = "CR_CRIT_MELEE",
-    [10] = "CR_CRIT_RANGED",
-    [11] = "CR_CRIT_SPELL",
-    [12] = "CR_CORRUPTION",
-    [13] = "CR_CORRUPTION_RESISTANCE",
-    [14] = "CR_SPEED",
-    [15] = "COMBAT_RATING_RESILIENCE_CRIT_TAKEN",
-    [16] = "COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN",
-    [17] = "CR_LIFESTEAL",
-    [18] = "CR_HASTE_MELEE",
-    [19] = "CR_HASTE_RANGED",
-    [20] = "CR_HASTE_SPELL",
-    [21] = "CR_AVOIDANCE",
-    [22] = "CR_UNUSED_2",
-    [23] = "CR_WEAPON_SKILL_RANGED",
-    [24] = "CR_EXPERTISE",
-    [25] = "CR_ARMOR_PENETRATION",
-    [26] = "CR_MASTERY",
-    [27] = "CR_UNUSED_3",
-    [28] = "CR_UNUSED_4",
-    [29] = "CR_VERSATILITY_DAMAGE_DONE",
-    [30] = "CR_VERSATILITY_DAMAGE_TAKEN"
-}
 
 function BCCBuddyEditBox_Show(text)
     if not BCCBuddyEditBox then
@@ -161,25 +73,6 @@ function BCCBuddyEditBox_Show(text)
     BCCBuddyEditBox:Show()
 end
 
-function TestBCCBuddy(t)
-    t = t and wipe(t) or {}
-    for i = 1, 10 do
-        print(i)
-        tinsert(t, strjoin(";", i, i, i))
-    end
-    print("test complete")
-    return t
-end
-
--- /run GetAvailableQuests(BCCBuddy_DB)
-function GetAvailableQuests(t)
-    t = t and wipe(t) or {}
-    for id in pairs(GetQuestsCompleted()) do
-        local name = C_QuestLog.GetQuestInfo(id)
-        print(id, name)
-    end
-end
-
 -- /run GetCharacterInfo()
 function GetCharacterInfo()
     local character = {}
@@ -235,7 +128,7 @@ function GetStats()
     stats.defenses = {}
     stats.defenses.armor, _, _, _, _ = UnitArmor("player")
     stats.defenses.defense = {}
-    stats.defenses.defense.baseDefense, stats.defenses.defense.armorDefense =
+    stats.defenses.defense.base, stats.defenses.defense.armor =
         UnitDefense("player");
     stats.defenses.defense.rating = GetCombatRating(16)
     stats.defenses.dodgeChance = GetDodgeChance()
@@ -299,23 +192,18 @@ function GetStats()
     for k, v in pairs(COMBAT_RATINGS) do
         stats.combatRatings[v] = GetCombatRating(k)
     end
-    --   stats.combatRating = {}
-    --   for var=1,31 do
-    --     stats.combatRating[tostring(var)] = GetCombatRating(var)
-    --  end
     return stats
 end
 
 function GetAvailableQusts()
-    t = {}
+    quests = {}
     for id in pairs(GetQuestsCompleted()) do
         local quest = C_QuestLog.GetQuestInfo(id)
-        t[tostring(id)] = quest
+        quests[tostring(id)] = quest
     end
-    return t
+    return quests
 end
 
--- /run GetCharacterInfo()
 -- /run GetPlayerTalentInfo()
 function GetPlayerTalentInfo()
     talents = {}
@@ -324,7 +212,7 @@ function GetPlayerTalentInfo()
         talentTab = {}
         talentTab.talents = {}
 
-        talentTab.id, talentTab.name, talentTab.description, talentTab.iconTexture, talentTab.pointsSpent, talentTab.background, talentTab.previewPointsSpent, talentTab.isUnlocked = GetTalentTabInfo( tabIndex )
+        talentTab.id, talentTab.name, talentTab.total, talentTab.iconTexture, talentTab.pointsSpent, talentTab.background, talentTab.previewPointsSpent, talentTab.isUnlocked = GetTalentTabInfo( tabIndex )
         
         for talentIndex = 1, GetNumTalents(tabIndex) do
             talent = {}
@@ -338,7 +226,6 @@ function GetPlayerTalentInfo()
     return talents
 end
 
--- /run SetAvailableQuests(BCCBuddy_DB)
 -- /run SetAvailableQuests(BCCBuddy_CHARACTER_DB)
 function SetAvailableQuests()
     BCCBuddy_CHARACTER_DB["QUESTS_COMPLETED"] = {}
@@ -351,79 +238,11 @@ function SetAvailableQuests()
     end
 end
 
-function Temp() print("Hello World!") end
-
-MyEventFrame = CreateFrame("Frame", "MyEventFrame", UIParent)
-MyEventFrame:RegisterEvent("INSPECT_READY")
-
-function MyCombatFrame_OnEvent(self, event, ...)
-    if event == "PLAYER_REGEN_ENABLED" then
-        print("Leaving combat...")
-    elseif event == "PLAYER_REGEN_DISABLED" then
-        print("Entering combat!")
-    elseif event == "INSPECT_READY" then
-        print("Inspect is ready!!!")
-    end
-end
--- MyCombatFrame:SetScript("OnEvent", MyCombatFrame_OnEvent)
-MyEventFrame:SetScript("OnEvent", MyCombatFrame_OnEvent)
-
-function TestInpect()
-    if CanInspect(unit) then
-        if InspectFrame then
-            if not InspectFrame:IsShown() then
-                InspectFrame.unit = "player"
-                NotifyInspect(unit)
-            end
-        else
-            NotifyInspect(unit)
-        end
-    end
-end
-
--- /run GetHeadSlotInfo()
-function GetHeadSlotInfo()
-    -- local headslotLink = GetInventoryItemLink("player", GetInventorySlotInfo("HEADSLOT"))
-    local slotId = GetInventorySlotInfo("HEADSLOT")
-    local link = GetInventoryItemLink("player", slotId)
-    -- see: https://wowwiki-archive.fandom.com/wiki/API_GetItemInfo
-    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType,
-          itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice =
-        GetItemInfo(link)
-    local _, _, Color, Ltype, Id, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix,
-          Unique, LinkLvl, Name = string.find(itemLink,
-                                              "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
-    print("itemName: ", itemName)
-    -- itemLink can be parsed: https://wowpedia.fandom.com/wiki/ItemLink
-    print("itemLink: ", itemLink)
-    print("\t Color: ", Color)
-    print("\t Ltype: ", Ltype)
-    print("\t Id: ", Id)
-    print("\t Enchant: ", Enchant)
-    print("\t Gem1: ", Gem1)
-    print("\t Gem2: ", Gem2)
-    print("\t Gem3: ", Gem3)
-    print("\t Gem4: ", Gem4)
-    print("\t Suffix: ", Suffix)
-    print("\t Unique: ", Unique)
-    print("\t LinkLvl: ", LinkLvl)
-    print("\t Name: ", Name)
-    print("itemRarity: ", itemRarity)
-    print("itemLevel: ", itemLevel)
-    print("itemMinLevel: ", itemMinLevel)
-    print("itemType: ", itemType)
-    print("itemSubType: ", itemSubType)
-    print("itemStackCount: ", itemStackCount)
-    print("itemEquipLoc: ", itemEquipLoc)
-    print("itemTexture: ", itemTexture)
-    print("itemSellPrice: ", itemSellPrice)
-    print("----")
-    print(enchantId)
-    print(gem1)
-    print(gem2)
-    print(gem3)
-    print(gem4)
-    print(itemType)
+-- /run GetEquipmentInfo()
+function GetEquipmentInfo()
+  equipment = {}
+  for k, v in pairs(SLOTS) do equipment[k] = GetSlotInfo(v) end
+  return equipment
 end
 
 -- /run GetSlotInfo(slot)
@@ -469,11 +288,4 @@ function GetSlotInfo(slot)
         print("no item equiped in this slot!")
     end
     return item
-end
-
--- /run GetEquipmentInfo()
-function GetEquipmentInfo()
-    equipment = {}
-    for k, v in pairs(SLOTS) do equipment[k] = GetSlotInfo(v) end
-    return equipment
 end

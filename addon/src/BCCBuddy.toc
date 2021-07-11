@@ -6,4 +6,5 @@
 ## SavedVariablesPerCharacter: HELLOWORLD_CHARACTER_DB
 
 json.lua
+globals.lua
 BCCBuddy.lua
