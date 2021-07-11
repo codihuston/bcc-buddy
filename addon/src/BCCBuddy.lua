@@ -285,7 +285,7 @@ function GetSlotInfo(slot)
         item.texture = itemTexture
         item.sellPrice = itemSellPrice
     else
-        print("no item equiped in this slot!")
+        -- print("no item equiped in this slot!")
     end
     return item
 end
