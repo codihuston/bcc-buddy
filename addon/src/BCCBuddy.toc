@@ -2,8 +2,8 @@
 ## Title: BCC Buddy
 ## Author: Codi Huston
 ## Version: 1.0
-## SavedVariables: HELLOWORLD_DB
-## SavedVariablesPerCharacter: HELLOWORLD_CHARACTER_DB
+## SavedVariables: BCC_BUDDY_DB
+## SavedVariablesPerCharacter: BCC_BUDDY_CHARACTER_DB
 
 json.lua
 globals.lua
